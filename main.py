@@ -60,14 +60,18 @@ class LogisticRegression(nn.Module):
 
 
 fname = 'data/train/parties_merged.csv'
+train_data = 'data/train/train.csv'
+test_data = 'data/test/test.csv'
 ngram_path = 'ngrams/bigram_merged.csv'
 
-news_dataset = NewsDataset(fname_parties=fname, fname_ngram=ngram_path, ngram_min_freq=4)
+train_dataset = NewsDataset(fname_parties=train_data, fname_ngram=ngram_path, ngram_min_freq=4)
+test_dataset = NewsDataset(fname_parties=test_data, fname_ngram=ngram_path, ngram_min_freq=4)
 
 batch_size = 40
-train_loader = DataLoader(dataset=news_dataset, batch_size=40, shuffle=True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
-input_size = news_dataset.get_len_cvec()
+input_size = train_dataset.get_len_cvec()
 print('input_size: ', input_size)
 
 # set hyper parameter
@@ -103,4 +107,3 @@ for epoch in range(num_epoch):
         ))
 
 # test model
-
