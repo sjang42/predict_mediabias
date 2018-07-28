@@ -13,3 +13,14 @@ def csv2dictlist(fname, encoding='utf-8-sig'):
         dictlist = [dict(zip(header, row)) for row in reader]
 
     return dictlist
+
+
+def dictlist2csv(dict_list, out_name='sample.csv', encoding='utf-8-sig'):
+    header = list(dict_list[0].keys())
+
+    with open(out_name, 'w', encoding=encoding) as f:
+        wr = csv.writer(f)
+        wr.writerow(header)
+
+        for dic in dict_list:
+            wr.writerow(list(dic.values()))
