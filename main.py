@@ -79,7 +79,7 @@ hidden_size = 10000
 num_class = 2
 
 learning_rate = 0.0001
-num_epoch = 10
+num_epoch = 5
 
 model = LogisticRegression(input_size, hidden_size, num_class)
 criterion = nn.CrossEntropyLoss()
@@ -107,3 +107,23 @@ for epoch in range(num_epoch):
         ))
 
 # test model
+print('Test model')
+total = 0
+total_correct = 0
+for i, (data, label) in enumerate(test_loader):
+    total += len(label)
+    label = label.squeeze()
+    outputs = model(data)
+    loss = criterion(outputs, label)
+
+    _, predictions = outputs.max(1)
+
+    is_equal = label == predictions
+    num_correct = is_equal.sum()
+    total_correct += num_correct
+
+    print('Correct : {}/{}, {}'.format(int(num_correct), len(label), int(num_correct) / len(label)))
+    print('Total accuracy {}/{}, {}'.format(int(total_correct), total, int(total_correct) / total))
+    print('')
+
+print('---Done---')
