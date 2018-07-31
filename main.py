@@ -80,8 +80,10 @@ num_class = 2
 
 learning_rate = 0.0001
 num_epoch = 5
+# device configuration
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-model = LogisticRegression(input_size, hidden_size, num_class)
+model = LogisticRegression(input_size, hidden_size, num_class).to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -90,7 +92,8 @@ total_step = len(train_loader)
 for epoch in range(num_epoch):
     print('epoch start')
     for i, (data, label) in enumerate(train_loader):
-        label = label.squeeze()
+        label = label.squeeze().to(device)
+        data = data.to(device)
         outputs = model(data)
         loss = criterion(outputs, label)
         optimizer.zero_grad()
@@ -112,7 +115,8 @@ total = 0
 total_correct = 0
 for i, (data, label) in enumerate(test_loader):
     total += len(label)
-    label = label.squeeze()
+    label = label.squeeze().to(device)
+    data = data.to(device)
     outputs = model(data)
     loss = criterion(outputs, label)
 
